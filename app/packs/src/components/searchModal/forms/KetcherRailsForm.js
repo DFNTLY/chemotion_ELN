@@ -75,6 +75,7 @@ const KetcherRailsform = () => {
     const isSync = currentCollection ? currentCollection.is_sync_to_me : false;
     let tanimoto = searchStore.ketcherRailsValues.tanimotoThreshold;
     if (tanimoto <= 0 || tanimoto > 1) { tanimoto = 0.3; }
+    const pgCartridgeInstalled = UIStore.getState();
 
     const selection = {
       elementType: 'structure',
@@ -166,6 +167,16 @@ const KetcherRailsform = () => {
                     Substructure Search
                   </Radio>
                 </Col>
+                <Col sm={4} md={4} lg={3}>
+                  <Radio
+                     value="subRDKit"
+                     checked={searchStore.ketcherRailsValues.searchType === 'subPgCart'}
+                     onChange={handleSearchTypeChange}
+                     hidden={!pgCartridgeInstalled}
+                  >
+                    Substructure Search with RDKit
+                 </Radio>
+               </Col>
               </Row>
             </Grid>
           </Panel.Body>
