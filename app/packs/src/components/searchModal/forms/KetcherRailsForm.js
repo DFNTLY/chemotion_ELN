@@ -25,7 +25,7 @@ function KetcherRailsform() {
 
   const searchStore = useContext(StoreContext).search;
   const panelVars = panelVariables(searchStore);
-  const pgCartridgeInstalled = false;
+  const { pgCartridgeInstalled } = UIStore.getState();
   let iframe;
 
   const searchValuesByMolfile = () => {
