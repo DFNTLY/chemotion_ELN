@@ -25,7 +25,7 @@ function KetcherRailsform() {
 
   const searchStore = useContext(StoreContext).search;
   const panelVars = panelVariables(searchStore);
-  const { pgCartridgeInstalled } = UIStore.getState();
+  const { pgCartridge } = UIStore.getState();
   let iframe;
 
   const searchValuesByMolfile = () => {
@@ -174,9 +174,9 @@ function KetcherRailsform() {
                     value="subRDKit"
                     checked={searchStore.ketcherRailsValues.searchType === 'subRDKit'}
                     onChange={handleSearchTypeChange}
-                    hidden={!pgCartridgeInstalled}
+                    hidden={!pgCartridge}
                   >
-                    {pgCartridgeInstalled ? 'Substructure Search with RDKit' : ''}
+                    {pgCartridge ? `Substructure Search with ${pgCartridge}` : ''}
                   </Radio>
                 </Col>
               </Row>
