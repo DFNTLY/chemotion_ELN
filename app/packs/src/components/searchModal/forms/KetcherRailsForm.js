@@ -166,17 +166,7 @@ function KetcherRailsform() {
                     checked={searchStore.ketcherRailsValues.searchType === 'sub'}
                     onChange={handleSearchTypeChange}
                   >
-                    Substructure Search
-                  </Radio>
-                </Col>
-                <Col sm={4} md={4} lg={3}>
-                  <Radio
-                    value="subRDKit"
-                    checked={searchStore.ketcherRailsValues.searchType === 'subRDKit'}
-                    onChange={handleSearchTypeChange}
-                    hidden={!pgCartridge}
-                  >
-                    {pgCartridge ? `Substructure Search with ${pgCartridge}` : ''}
+                    {pgCartridge ? `Substructure Search with ${pgCartridge}` : 'Substructure Search'}
                   </Radio>
                 </Col>
               </Row>
