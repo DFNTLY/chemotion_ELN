@@ -58,9 +58,8 @@ module Chemotion
         vessels = paginate(scope).map do |vessel|
           Entities::VesselInstanceEntity.represent(
             vessel,
-            displayed_in_list: true,
-            detail_levels: ElementDetailLevelCalculator.new(user: current_user,
-                                                            element: cell_line_sample).detail_levels,
+            # displayed_in_list: true,
+            #  detail_levels: ElementDetailLevelCalculator.new(user: current_user, element: cell_line_sample).detail_levels,
           )
         end
         { vessels: vessels }
@@ -68,13 +67,13 @@ module Chemotion
 
       desc 'Get a vessel by id'
       params do
-        requires :id, type: Integer, desc: 'id of vessel instance to load'
+        requires :id, type: String, desc: 'id of vessel instance to load'
       end
       get ':id' do
         begin
           vessel = Vessel.find(params[:id])
         rescue ActiveRecord::RecordNotFound
-          error!('404 Not Found', 404) 
+          error!('404 Not Found', 404)
         rescue StandardError => e
           error!(e, 400)
         end
@@ -83,14 +82,18 @@ module Chemotion
 
       desc 'Create a new Vessel sample'
       params do
-        requires :name, type: String, desc: 'name of a vessel sample'
-        optional :material_details, type: String, desc: 'XXXXX'
-        optional :material_type, type: String, desc: 'YYYY'
+        requires :name, type: String, desc: 'name of a vessel template'
+        optional :vessel_name, type: String, desc: 'name of a vessel sample'
+        optional :material_details, type: String, desc: 'details of the vessel template'
+        optional :details, type: String, desc: 'additional details'
+        optional :material_type, type: String, desc: 'material type of the vessel'
         optional :vessel_type, type: String, desc: 'type of the vessel'
-        optional :volume_amount, type: Float, desc: 'XXXX'
-        optional :volume_unit, type: String, desc: 'XXXX'
+        optional :volume_amount, type: Float, desc: 'volume amount'
+        optional :volume_unit, type: String, desc: 'volume unit'
         optional :weight_amount, type: Float, desc: 'weight of the vessel'
         optional :weight_unit, type: String, desc: 'weight unit of the vessel'
+        optional :bar_code, type: String, desc: 'bar code of the vessel'
+        optional :qr_code, type: String, desc: 'qr code of the vessel'
         requires :collection_id, type: Integer, desc: 'collection of the vessel sample'
         optional :description, type: String, desc: 'description of a vessel sample'
         optional :short_label, type: String, desc: 'short label of a vessel sample'
@@ -101,15 +104,9 @@ module Chemotion
 
         vessel_template = VesselTemplate.find_by(
           name: params[:name],
-          material_details: params[:material_details],
-          material_type: params[:material_type],
-          vessel_type: params[:vessel_type],
-          volume_amount: params[:volume_amount],
-          volume_unit: params[:volume_unit],
-          weight_amount: params[:weight_amount],
-          weight_unit: params[:weight_unit],
         ) || VesselTemplate.create!(
           name: params[:name],
+          details: params[:details],
           material_details: params[:material_details],
           material_type: params[:material_type],
           vessel_type: params[:vessel_type],
@@ -120,14 +117,19 @@ module Chemotion
         )
 
         vessel = Vessel.create!(
-          name: params[:name],
-          description: params[:description],
-          short_label: params[:short_label],
           vessel_template: vessel_template,
-          creator: current_user,
+          name: params[:vessel_name],
+          user_id: current_user.id,
+          description: params[:description],
+          bar_code: params[:bar_code],
+          qr_code: params[:qr_code],
+          short_label: params[:short_label],
         )
 
-        vessel.collections << collection
+        if params[:collection_id]
+          collection = current_user.collections.find_by(id: params[:collection_id])
+          vessel.collections << collection if collection.present?
+        end
 
         if params[:container]
           begin
@@ -185,6 +187,38 @@ module Chemotion
         end
         get ':id' do
           return CelllineMaterial.find(params[:id])
+        end
+      end
+
+      desc 'Delete a Vessel'
+      params do
+        requires :id, type: String, desc: 'ID of the vessel instance to delete'
+      end
+      delete ':id' do
+        vessel = Vessel.find_by(id: params[:id])
+        if vessel.nil?
+          error!('404 Vessel Not Found', 404)
+        else
+          vessel.destroy!
+          status 200
+          { message: 'Vessel successfully deleted', vessel_id: params[:id] }
+        end
+      end
+
+      desc 'Delete a VesselTemplate'
+      params do
+        requires :id, type: String, desc: 'ID of the vessel template to delete'
+      end
+      delete 'vessel_template/:id' do
+        vessel_template = VesselTemplate.find_by(id: params[:id])
+        if vessel_template.nil?
+          error!('404 VesselTemplate Not Found', 404)
+        elsif vessel_template.vessels.exists?
+          error!('400 Cannot delete VesselTemplate. It is associated with one or more vessels.', 400)
+        else
+          vessel_template.destroy!
+          status 200
+          { message: 'VesselTemplate successfully deleted', vessel_template_id: params[:id] }
         end
       end
     end
