@@ -289,6 +289,7 @@ module Chemotion
             screen_ids: @screen_ids,
             research_plan_ids: @research_plan_ids,
             cell_line_ids: @cell_line_ids,
+            vessel_ids: @vessel_ids,
             element_ids: @element_ids,
             collection_attributes: params[:collection_attributes].merge(shared_by_id: current_user.id)
           ).execute!
