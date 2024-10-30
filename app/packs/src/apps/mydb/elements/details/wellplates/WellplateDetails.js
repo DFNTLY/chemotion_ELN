@@ -35,6 +35,7 @@ import HeaderCommentSection from 'src/components/comments/HeaderCommentSection';
 import CommentSection from 'src/components/comments/CommentSection';
 import CommentActions from 'src/stores/alt/actions/CommentActions';
 import CommentModal from 'src/components/common/CommentModal';
+import DetailViewExpansionToggleButton from 'src/components/common/DetailViewExpansionToggleButton';
 import { commentActivation } from 'src/utilities/CommentHelper';
 import { formatTimeStampsOfElement } from 'src/utilities/timezoneHelper';
 import WellplateModel from 'src/models/Wellplate';
@@ -251,11 +252,7 @@ export default class WellplateDetails extends Component {
         </div>
         <div className="d-flex justify-content-end gap-2">
           <PrintCodeButton element={wellplate} />
-          <OverlayTrigger placement="bottom" overlay={<Tooltip id="fullSample">FullScreen</Tooltip>}>
-            <Button variant="info" size="sm" onClick={() => this.props.toggleFullScreen()}>
-              <i className="fa fa-expand" />
-            </Button>
-          </OverlayTrigger>
+          <DetailViewExpansionToggleButton />
           { displaySaveButton &&
             <OverlayTrigger placement="bottom" overlay={<Tooltip id="saveWellplate">Save Wellplate</Tooltip>}>
               <Button
@@ -418,5 +415,4 @@ export default class WellplateDetails extends Component {
 
 WellplateDetails.propTypes = {
   wellplate: PropTypes.instanceOf(WellplateModel).isRequired,
-  toggleFullScreen: PropTypes.func.isRequired,
 };

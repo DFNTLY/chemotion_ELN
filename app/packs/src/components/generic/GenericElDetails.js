@@ -26,6 +26,7 @@ import ElementStore from 'src/stores/alt/stores/ElementStore';
 import UIActions from 'src/stores/alt/actions/UIActions';
 import UIStore from 'src/stores/alt/stores/UIStore';
 import ConfirmClose from 'src/components/common/ConfirmClose';
+import DetailViewExpansionToggleButton from 'src/components/common/DetailViewExpansionToggleButton';
 import GenericElDetailsContainers from 'src/components/generic/GenericElDetailsContainers';
 import GenericEl from 'src/models/GenericEl';
 import Attachment from 'src/models/Attachment';
@@ -384,7 +385,6 @@ export default class GenericElDetails extends Component {
   }
 
   header(genericEl) {
-    const { toggleFullScreen } = this.props;
     const iconClass = (genericEl.element_klass && genericEl.element_klass.icon_name) || '';
     const { currentCollection } = UIStore.getState();
     const defCol = currentCollection
@@ -415,18 +415,7 @@ export default class GenericElDetails extends Component {
         <ShowUserLabels element={genericEl} />
         <ConfirmClose el={genericEl} />
         {copyBtn}
-        <OverlayTrigger
-          placement="bottom"
-          overlay={<Tooltip id="tip_fullscreen_btn">FullScreen</Tooltip>}
-        >
-          <Button
-            variant="info"
-            size="sm"
-            onClick={() => toggleFullScreen()}
-          >
-            <i className="fa fa-expand" aria-hidden="true" />
-          </Button>
-        </OverlayTrigger>
+        <DetailViewExpansionToggleButton />
         <OverlayTrigger
           placement="bottom"
           overlay={<Tooltip id="saveScreen">Save</Tooltip>}
@@ -530,7 +519,6 @@ export default class GenericElDetails extends Component {
 
 GenericElDetails.propTypes = {
   genericEl: PropTypes.object,
-  toggleFullScreen: PropTypes.func.isRequired,
 };
 
 GenericElDetails.defaultProps = {

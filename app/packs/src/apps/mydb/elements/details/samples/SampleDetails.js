@@ -47,6 +47,7 @@ import DetailsTabLiteratures from 'src/apps/mydb/elements/details/literature/Det
 import MoleculesFetcher from 'src/fetchers/MoleculesFetcher';
 import QcMain from 'src/apps/mydb/elements/details/samples/qcTab/QcMain';
 import ConfirmClose from 'src/components/common/ConfirmClose';
+import DetailViewExpansionToggleButton from 'src/components/common/DetailViewExpansionToggleButton';
 import { EditUserLabels, ShowUserLabels } from 'src/components/UserLabels';
 import CopyElementModal from 'src/components/common/CopyElementModal';
 import NotificationActions from 'src/stores/alt/actions/NotificationActions';
@@ -975,18 +976,7 @@ export default class SampleDetails extends React.Component {
           {inventorySample}
           {!sample.isNew && <OpenCalendarButton isPanelHeader eventableId={sample.id} eventableType="Sample" />}
           <PrintCodeButton element={sample} />
-          <OverlayTrigger
-            placement="bottom"
-            overlay={<Tooltip id="fullSample">FullScreen</Tooltip>}
-          >
-            <Button
-              variant="info"
-              size="xxsm"
-              onClick={() => this.props.toggleFullScreen()}
-            >
-              <i className="fa fa-expand" />
-            </Button>
-          </OverlayTrigger>
+          <DetailViewExpansionToggleButton />
           {copyBtn}
           {this.saveAndCloseSample(sample, saveBtnDisplay)}
         </div>
@@ -1410,5 +1400,4 @@ export default class SampleDetails extends React.Component {
 
 SampleDetails.propTypes = {
   sample: PropTypes.object,
-  toggleFullScreen: PropTypes.func,
 };

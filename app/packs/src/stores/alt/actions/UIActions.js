@@ -14,6 +14,9 @@ class UIActions {
   expandSidebar = () => null;
   toggleSidebar = () => null;
 
+  toggleDetailViewExpansion = () => null;
+  collapseDetailView = () => null;
+
   showCollectionManagement() {
     return null;
   }

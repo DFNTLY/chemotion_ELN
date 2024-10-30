@@ -60,6 +60,7 @@ class UIStore {
         page: 1,
       },
       isSidebarCollapsed: false,
+      isDetailViewExpanded: false,
       showPreviews: true,
       showAdvancedSearch: false,
       filterCreatedAt: true,
@@ -120,6 +121,8 @@ class UIStore {
       handleShowGenericWorkflowModal: UIActions.showGenericWorkflowModal,
       handleExpandSidebar: UIActions.expandSidebar,
       handleToggleSidebar: UIActions.toggleSidebar,
+      handleToggleDetailViewExpansion: UIActions.toggleDetailViewExpansion,
+      handleCollapseDetailView: UIActions.collapseDetailView,
     });
   }
 
@@ -303,6 +306,8 @@ class UIStore {
     const state = this.state;
     const isSync = collection.is_sync_to_me ? true : false;
     const { filterCreatedAt, fromDate, toDate, userLabel, productOnly } = state;
+
+    this.handleCollapseDetailView();
 
     if (!hasChanged) {
       hasChanged = !state.currentCollection;
@@ -501,6 +506,14 @@ class UIStore {
 
   handleToggleSidebar() {
     this.setState({ isSidebarCollapsed: !this.state.isSidebarCollapsed });
+  }
+
+  handleToggleDetailViewExpansion() {
+    this.setState({ isDetailViewExpanded: !this.state.isDetailViewExpanded });
+  }
+
+  handleCollapseDetailView() {
+    this.setState({ isDetailViewExpanded: false });
   }
 }
 

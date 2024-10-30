@@ -20,6 +20,7 @@ import ResearchPlanMetadata from 'src/apps/mydb/elements/details/researchPlans/R
 import Attachment from 'src/models/Attachment';
 import LoadingActions from 'src/stores/alt/actions/LoadingActions';
 import ConfirmClose from 'src/components/common/ConfirmClose';
+import DetailViewExpansionToggleButton from 'src/components/common/DetailViewExpansionToggleButton';
 import ResearchPlan from 'src/models/ResearchPlan';
 import ResearchPlanDetailsAttachments from
   'src/apps/mydb/elements/details/researchPlans/attachmentsTab/ResearchPlanDetailsAttachments';
@@ -504,11 +505,7 @@ export default class ResearchPlanDetails extends Component {
                 <i className="fa fa-floppy-o" aria-hidden="true" />
               </Button>
             </OverlayTrigger>
-            <OverlayTrigger placement="bottom" overlay={<Tooltip id="fullSample">Full Research Plan</Tooltip>}>
-              <Button variant="info" size="xxsm" onClick={this.props.toggleFullScreen}>
-                <i className="fa fa-expand" aria-hidden="true" />
-              </Button>
-            </OverlayTrigger>
+            <DetailViewExpansionToggleButton />
             {!researchPlan.isNew
               && <OpenCalendarButton isPanelHeader eventableId={researchPlan.id} eventableType="ResearchPlan" />}
             {copyBtn}
@@ -630,5 +627,4 @@ export default class ResearchPlanDetails extends Component {
 
 ResearchPlanDetails.propTypes = {
   researchPlan: PropTypes.instanceOf(ResearchPlan).isRequired,
-  toggleFullScreen: PropTypes.func.isRequired,
 };

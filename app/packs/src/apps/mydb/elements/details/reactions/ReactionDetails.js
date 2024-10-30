@@ -31,6 +31,7 @@ import { setReactionByType } from 'src/apps/mydb/elements/details/reactions/Reac
 import { sampleShowOrNew } from 'src/utilities/routesUtils';
 import ReactionSvgFetcher from 'src/fetchers/ReactionSvgFetcher';
 import ConfirmClose from 'src/components/common/ConfirmClose';
+import DetailViewExpansionToggleButton from 'src/components/common/DetailViewExpansionToggleButton';
 import { rfValueFormat } from 'src/utilities/ElementUtils';
 import ExportSamplesButton from 'src/apps/mydb/elements/details/ExportSamplesButton';
 import CopyElementModal from 'src/components/common/CopyElementModal';
@@ -356,19 +357,7 @@ export default class ReactionDetails extends Component {
                 <i className="fa fa-cogs" />
               </Button>
             </OverlayTrigger>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={<Tooltip id="fullSample">FullScreen</Tooltip>}
-            >
-              <Button
-                variant="info"
-                size="xxsm"
-                // eslint-disable-next-line react/destructuring-assignment
-                onClick={() => this.props.toggleFullScreen()}
-              >
-                <i className="fa fa-expand" />
-              </Button>
-            </OverlayTrigger>
+            <DetailViewExpansionToggleButton />
             {reaction.changed
               && (
                 <>
@@ -659,5 +648,4 @@ export default class ReactionDetails extends Component {
 ReactionDetails.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   reaction: PropTypes.object,
-  toggleFullScreen: PropTypes.func,
 };

@@ -1,55 +1,48 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col } from 'react-bootstrap';
+
+import ElementStore from 'src/stores/alt/stores/ElementStore';
+import UIStore from 'src/stores/alt/stores/UIStore';
 
 import ElementsList from 'src/apps/mydb/elements/list/ElementsList';
 import ElementDetails from 'src/apps/mydb/elements/details/ElementDetails';
-import ElementStore from 'src/stores/alt/stores/ElementStore';
 
-export default class Elements extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showDetailView: false
-    };
+export default function Elements() {
+  const [showDetailView, setShowDetailView] = useState(false);
+  const [isDetailViewExpanded, setIsDetailViewExpanded] = useState(false);
 
-    this.onElementStoreChange = this.onElementStoreChange.bind(this);
-  }
+  useEffect(() => {
+    const onElementStoreChange = ({ currentElement }) => setShowDetailView(currentElement !== null);
+    ElementStore.listen(onElementStoreChange);
+    onElementStoreChange(ElementStore.getState());
 
-  componentDidMount() {
-    ElementStore.listen(this.onElementStoreChange);
-    this.onElementStoreChange(ElementStore.getState());
-  }
+    const onUiStoreChange = ({ isDetailViewExpanded }) => setIsDetailViewExpanded(isDetailViewExpanded);
+    UIStore.listen(onUiStoreChange);
+    onUiStoreChange(UIStore.getState());
 
-  componentWillUnmount() {
-    ElementStore.unlisten(this.onElementStoreChange);
-  }
-
-  onElementStoreChange(state) {
-    const { currentElement } = state;
-    const { showDetailView } = this.state;
-
-    const newShowDetailView = currentElement !== null;
-    if (showDetailView !== newShowDetailView) {
-      this.setState({ showDetailView: newShowDetailView });
+    return () => {
+      ElementStore.unlisten(onElementStoreChange);
+      UIStore.unlisten(onUiStoreChange);
     }
-  }
+  }, []);
 
-  render() {
-    const { showDetailView } = this.state;
-    const detailWidth = showDetailView ? 7 : 0;
-    const listWidth = 12 - detailWidth;
+  const detailWidth = showDetailView
+    ? isDetailViewExpanded ? 12 : 7
+    : 0;
+  const listWidth = 12 - detailWidth;
 
-    return (
-      <div className="flex-grow-1 d-flex ps-3 pt-2">
+  return (
+    <div className="flex-grow-1 d-flex ps-3 pt-2">
+      {!isDetailViewExpanded && (
         <Col xs={listWidth} className="pe-3">
           <ElementsList overview={!showDetailView} />
         </Col>
-        {showDetailView && (
-          <Col xs={detailWidth} className="pe-3">
-            <ElementDetails />
-          </Col>
-        )}
-      </div>
-    );
-  }
+      )}
+      {showDetailView && (
+        <Col xs={detailWidth} className="pe-3">
+          <ElementDetails />
+        </Col>
+      )}
+    </div>
+  );
 }

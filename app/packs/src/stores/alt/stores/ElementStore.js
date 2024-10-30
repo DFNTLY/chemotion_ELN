@@ -1433,6 +1433,7 @@ class ElementStore {
 
     if (newSelecteds.length === 0) {
       this.changeCurrentElement(null);
+      UIActions.collapseDetailView.defer();
     } else {
       this.changeCurrentElement(newCurrentElement);
     }

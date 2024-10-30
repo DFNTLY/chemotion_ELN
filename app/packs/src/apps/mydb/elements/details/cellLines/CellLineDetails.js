@@ -6,8 +6,10 @@ import { observer } from 'mobx-react';
 import DetailActions from 'src/stores/alt/actions/DetailActions';
 import PropTypes from 'prop-types';
 import UIStore from 'src/stores/alt/stores/UIStore';
+import UIActions from 'src/stores/alt/actions/UIActions';
 import UserStore from 'src/stores/alt/stores/UserStore';
 import CollectionUtils from 'src/models/collection/CollectionUtils';
+import DetailViewExpansionToggleButton from 'src/components/common/DetailViewExpansionToggleButton';
 
 import {
   ButtonToolbar, Button, Card,
@@ -88,23 +90,10 @@ class CellLineDetails extends React.Component {
         <div className="d-flex gap-1">
           {this.renderSaveButton(true)}
           {this.renderSaveButton()}
-          {this.renderEnlargenButton()}
+          <DetailViewExpansionToggleButton />
           {this.renderCloseHeaderButton()}
         </div>
       </div>
-    );
-  }
-
-  renderEnlargenButton() {
-    const { toggleFullScreen } = this.props;
-    return (
-      <Button
-        variant="info"
-        size="xxsm"
-        onClick={toggleFullScreen}
-      >
-        <i className="fa fa-expand" />
-      </Button>
     );
   }
 
@@ -246,5 +235,4 @@ CellLineDetails.propTypes = {
     literatures: PropTypes.arrayOf(PropTypes.object),
     disease: PropTypes.string.isRequired
   }).isRequired,
-  toggleFullScreen: PropTypes.func.isRequired
 };

@@ -8,6 +8,7 @@ import { unionBy, findIndex } from 'lodash';
 import Immutable from 'immutable';
 
 import ConfirmClose from 'src/components/common/ConfirmClose';
+import DetailViewExpansionToggleButton from 'src/components/common/DetailViewExpansionToggleButton';
 import DetailActions from 'src/stores/alt/actions/DetailActions';
 import ElementActions from 'src/stores/alt/actions/ElementActions';
 import ElementCollectionLabels from 'src/apps/mydb/elements/labels/ElementCollectionLabels';
@@ -203,19 +204,8 @@ export default class ScreenDetails extends Component {
           {screen.isNew
             ? null
             : <OpenCalendarButton isPanelHeader eventableId={screen.id} eventableType="Screen" />}
-          
-          <OverlayTrigger
-            placement="bottom"
-            overlay={<Tooltip id="fullSample">FullScreen</Tooltip>}
-          >
-            <Button
-              variant="info"
-              size="xxsm"
-              onClick={() => this.props.toggleFullScreen()}
-            >
-              <i className="fa fa-expand" />
-            </Button>
-          </OverlayTrigger>
+
+          <DetailViewExpansionToggleButton />
           <OverlayTrigger
             placement="bottom"
             overlay={<Tooltip id="saveScreen">Save Screen</Tooltip>}
@@ -472,5 +462,4 @@ export default class ScreenDetails extends Component {
 
 ScreenDetails.propTypes = {
   screen: PropTypes.instanceOf(Screen).isRequired,
-  toggleFullScreen: PropTypes.func.isRequired,
 };
