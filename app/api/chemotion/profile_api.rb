@@ -134,6 +134,7 @@ module Chemotion
           'screen' => 4,
           'research_plan' => 5,
           'cell_line' => -1000,
+          'vessel' => -1100,
         } if data['layout'].nil?
 
         layout = data['layout'].select { |e| available_ements.include?(e) }
