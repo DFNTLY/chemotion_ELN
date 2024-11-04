@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Col } from 'react-bootstrap';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 
 import ElementStore from 'src/stores/alt/stores/ElementStore';
 import UIStore from 'src/stores/alt/stores/UIStore';
@@ -32,17 +32,30 @@ export default function Elements() {
   const listWidth = 12 - detailWidth;
 
   return (
-    <div className="flex-grow-1 d-flex ps-3 pt-2">
-      {!isDetailViewExpanded && (
-        <Col xs={listWidth} className="pe-3">
-          <ElementsList overview={!showDetailView} />
-        </Col>
-      )}
-      {showDetailView && (
-        <Col xs={detailWidth} className="pe-3">
-          <ElementDetails />
-        </Col>
-      )}
+    <div className="flex-grow-1">
+      <PanelGroup className="p-3" direction="horizontal">
+        {!isDetailViewExpanded && (
+          <>
+            <Panel className="overflow-x-auto">
+              <div className="h-100" style={{ minWidth: '600px' }}>
+                <ElementsList overview={!showDetailView} />
+              </div>
+            </Panel>
+          </>
+        )}
+
+        {!isDetailViewExpanded && showDetailView && (
+          <PanelResizeHandle className="px-1 mx-1" />
+        )}
+
+        {showDetailView && (
+          <Panel className="overflow-x-auto">
+            <div className="h-100" style={{ minWidth: '680px' }}>
+              <ElementDetails />
+            </div>
+          </Panel>
+        )}
+      </PanelGroup>
     </div>
   );
 }
