@@ -76,7 +76,7 @@ export const VesselDetailsStore = types
     addVessel(vesselData) {
       self.vessels.set(vesselData.id, VesselItem.create(vesselData));
     },
-    removeVessel(id) {
+    removeVesselFromStore(id) {
       self.vessels.delete(id);
     },
     changeName(id, newName) {
@@ -145,6 +145,39 @@ export const VesselDetailsStore = types
         vessel.setVesselInstanceDescription(newDescription);
       }
     },
+    convertVesselToModel(jsVesselModel) {
+      if (self.vesselItem.has(jsVesselModel.id)) {
+        return;
+      }
+
+      // self.cellLineItem.set(jsCellLineModel.id, CellLineItem.create({
+      //   cellLineId: jsCellLineModel.cellLineId,
+      //   id: jsCellLineModel.id.toString(),
+      //   organism: jsCellLineModel.organism,
+      //   tissue: jsCellLineModel.tissue,
+      //   cellType: jsCellLineModel.cellType,
+      //   mutation: jsCellLineModel.mutation,
+      //   disease: jsCellLineModel.disease,
+      //   itemDescription: jsCellLineModel.itemComment,
+      //   bioSafetyLevel: jsCellLineModel.bioSafetyLevel,
+      //   variant: jsCellLineModel.variant,
+      //   optimalGrowthTemperature: jsCellLineModel.optimal_growth_temp,
+      //   cryopreservationMedium: jsCellLineModel.cryopreservationMedium,
+      //   cellLineName: jsCellLineModel.cellLineName,
+      //   materialDescription: jsCellLineModel.materialDescription,
+      //   gender: jsCellLineModel.gender,
+      //   amount: jsCellLineModel.amount,
+      //   unit: jsCellLineModel.unit,
+      //   passage: jsCellLineModel.passage,
+      //   contamination: jsCellLineModel.contamination,
+      //   source: jsCellLineModel.source,
+      //   growthMedium: jsCellLineModel.growthMedium,
+      //   itemName: jsCellLineModel.itemName,
+      //   shortLabel: jsCellLineModel.short_label,
+      // }));
+
+    },
+      
     setMaterialProperties(id, properties) {
       const item = self.vessels.get(id);
       if (item === undefined) {
@@ -172,5 +205,15 @@ export const VesselDetailsStore = types
     },
     hasVessel(id) {
       return self.vessels.has(id);
+    },
+    checkInputValidity(id) {
+      const result = [];
+      const item = self.VesselItem.get(id);
+      if (item.name.trim() === '') { result.push('name'); }
+      // if (item.source.trim() === '') { result.push('source'); }
+      if (item.unit.trim() === '') { result.push('unit'); }
+      if (!item.isAmountValid()) { result.push('amount'); }
+      // if (!Number.isInteger(item.passage) || item.passage === 0) { result.push('passage'); }
+      return result;
     }
   }));
